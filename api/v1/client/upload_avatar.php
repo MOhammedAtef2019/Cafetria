@@ -4,7 +4,7 @@
     header('Access-Control-Allow-Methods: POST');
     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
-    include_once '../../../config/Database.php';
+    include_once '../../../config/database.php';
     include_once '../../../models/Client.php';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['QUERY_STRING'])) {

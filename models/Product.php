@@ -71,8 +71,8 @@ class Product
         $db = $db !== null ? $db : new Database();
         
         $this->conn = $db->connect();
-        //$this->storage_prod_path = "http://cafeteria.elfabrikaa.online/Cafetria2/storage/product_avatar/";
-        $this->storage_prod_path = "http://localhost:80/c/v3/storage/product_avatar/";
+        $this->storage_prod_path = "http://cafeteria.elfabrikaa.online/Cafetria2/storage/product_avatar/";
+        // $this->storage_prod_path = "http://localhost:80/c/v3/storage/product_avatar/";
         // $this->storage_client_path = "http://cafeteria.elfabrikaa.online/Cafetria2/storage/client_avatar/";
 
         $this->selectIds = array();

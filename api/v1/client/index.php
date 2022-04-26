@@ -4,7 +4,8 @@
     header('Access-Control-Allow-Methods: POST');
 	header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
-	
+// 	echo "hello";
+// 	exit();
 	spl_autoload_register(function ($className) {
         $path = strtolower($className) . ".php";
         if (file_exists($path)) {

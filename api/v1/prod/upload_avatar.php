@@ -5,10 +5,11 @@
     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
 
-    include_once '../../../config/Database.php';
+    include_once '../../../config/database.php';
     include_once '../../../models/Product.php';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['QUERY_STRING'])) {
+
         $db = new Database();
 
         $prod = new Product($db);
@@ -18,6 +19,7 @@
         $queries = array();
         parse_str($_SERVER['QUERY_STRING'], $queries);
         if (isset($queries['id'])) {
+            
             $prod->id  = $queries['id'];
             var_dump($_FILES);
             if ($prod->getProdDetailsById() && isset($_FILES["avatar"]["name"])) {

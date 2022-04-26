@@ -61,8 +61,8 @@ class Client
         $db = $db !== null ? $db : new Database();
         
         $this->conn = $db->connect();
-        $this->storage_client_path = "http://localhost:80/c/v3/storage/client_avatar/";
-        // $this->storage_client_path = "http://cafeteria.elfabrikaa.online/Cafetria2/storage/client_avatar/";
+        // $this->storage_client_path = "http://localhost:80/c/v3/storage/client_avatar/";
+        $this->storage_client_path = "http://cafeteria.elfabrikaa.online/Cafetria2/storage/client_avatar/";
     }
 
     public function getAllClients()
@@ -172,5 +172,15 @@ class Client
         } else {
             return false;
         }
+    }
+    
+    public function getClientsWithTotalOfOrders()
+    {
+        $sql = "SELECT * FROM client WHERE email = :email";
+        $sql = "SELECT client.id, name, SUM(orders.price) total FROM client, orders WHERE client.id = orders.customer_id GROUP BY client.id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $client = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $client;
     }
 }

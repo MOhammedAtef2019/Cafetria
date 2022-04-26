@@ -157,6 +157,29 @@
                 $this->throwError(ACCESS_TOKEN_ERRORS, $e->getMessage());
             }
         }
+        
+        public function validateTokenForce($tok)
+        {
+            try {
+                // $token = $this->getBearerToken();
+                $payload = JWT::decode($tok, SECRETE_KEY, ['HS256']);
+
+                $stmt = $this->dbConn->prepare("SELECT * FROM client WHERE id = :userId");
+                $stmt->bindParam(":userId", $payload->userId);
+                $stmt->execute();
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                if (!is_array($user)) {
+                    $this->returnResponse(INVALID_USER_PASS, "This user is not found in our database.");
+                }
+
+                // if ($user['active'] == 0) {
+                //     $this->returnResponse(USER_NOT_ACTIVE, "This user may be decactived. Please contact to admin.");
+                // }
+                $this->userId = $payload->userId;
+            } catch (Exception $e) {
+                $this->throwError(ACCESS_TOKEN_ERRORS, $e->getMessage());
+            }
+        }
 
         public function processApi()
         {
@@ -196,6 +219,11 @@
         * */
         public function getAuthorizationHeader()
         {
+            // $data = json_decode($this->request, true);
+            // $tok = json_encode($data['token'], true);
+            // $this->throwError(ATHORIZATION_HEADER_NOT_FOUND, $_SERVER);
+
+
             $headers = null;
             // $_SERVER = $this->convertJsonToArray($_SERVER);
             if (isset($_SERVER['Authorization'])) {
@@ -214,7 +242,7 @@
                 // Server-side fix for bug in old Android versions (a nice side-effect of this fix means we don't care about capitalization for Authorization)
                 $requestHeaders = array_combine(array_map('ucwords', array_keys($requestHeaders)), array_values($requestHeaders));
                 // var_dump($requestHeaders);
-                $requestHeaders['Authorization'] = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NTAyODAyNzYsImlzcyI6ImxvY2FsaG9zdCIsImV4cCI6MTY1NTQ2NDI3NiwidXNlcklkIjoiMyIsInJvbGUiOiIwIn0.ZTQg2JZgMUOsCgMZryvOa0TxWfj_k7mLqVqOLR2EGnM";
+                // $requestHeaders['Authorization'] = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NTAyODAyNzYsImlzcyI6ImxvY2FsaG9zdCIsImV4cCI6MTY1NTQ2NDI3NiwidXNlcklkIjoiMyIsInJvbGUiOiIwIn0.ZTQg2JZgMUOsCgMZryvOa0TxWfj_k7mLqVqOLR2EGnM";
             
                 // echo "bbbbbbbbbbbbbbbbbbbbb";
                 if (isset($requestHeaders['Authorization'])) {

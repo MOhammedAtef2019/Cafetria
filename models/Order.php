@@ -115,11 +115,25 @@ class Order
         $this->endDate = $end;
     }
 
+    // public function getOrdersByTimeBoundary()
+    // {
+    //     $stmt = $this->conn->prepare("SELECT * FROM " . $this->tableName . " WHERE date BETWEEN :startDate AND :endDate");
+    //     $stmt->bindParam(':startDate', $this->startDate);
+    //     $stmt->bindParam(':endDate', $this->endDate);
+
+    //     $stmt->execute();
+    //     $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    //     return $orders;
+    // }
+    
     public function getOrdersByTimeBoundary()
     {
-        $stmt = $this->conn->prepare("SELECT * FROM " . $this->tableName . " WHERE date BETWEEN :startDate AND :endDate");
+        $sql = "SELECT o.id, date, status, price, note, customer_id, c.name FROM orders o JOIN client c ON o.customer_id = c.id WHERE customer_id=:id AND o.date BETWEEN :startDate AND :endDate";
+        $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':startDate', $this->startDate);
         $stmt->bindParam(':endDate', $this->endDate);
+        $stmt->bindParam(':id', $this->customer_id);
 
         $stmt->execute();
         $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);

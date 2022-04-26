@@ -45,7 +45,10 @@
 
         public function getClientByToken()
         {
+            // $clientTok = $this->validateParameter('token', $this->param['token'], STRING);
+
             $client = new Client();
+            // validateTokenForce($clientTok);
             $client->setId($this->userId);
             $client = $client->getClientDetailsById();
 
@@ -162,5 +165,17 @@
             }
 
             $this->returnResponse(SUCCESS_RESPONSE, $message);
+        }
+        
+        public function getAllUsersWithTotalChecksAmount()
+        {
+            $cust = new Client;
+            $client = $cust->getClientsWithTotalOfOrders();
+
+            if (!is_array($client)) {
+                $this->returnResponse(SUCCESS_RESPONSE, ['message' => 'The are no clients.']);
+            }
+
+            $this->returnResponse(SUCCESS_RESPONSE, $client);
         }
     }
